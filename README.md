@@ -1,0 +1,2 @@
+# UpTheStack-ArgoCD
+GitOps
