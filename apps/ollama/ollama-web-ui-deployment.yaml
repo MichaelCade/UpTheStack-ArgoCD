@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: web-ui
-          image: ollama/web-ui:latest
+          image: open-webui/open-webui:latest
           ports:
             - containerPort: 8080
           env:
