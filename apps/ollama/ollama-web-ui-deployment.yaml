@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama-webui
+  template:
+    metadata:
+      labels:
+        app: ollama-webui
+    spec:
+      containers:
+        - name: web-ui
+          image: ollama/web-ui:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OLLAMA_API_URL
+              value: "http://ollama-service:80"
