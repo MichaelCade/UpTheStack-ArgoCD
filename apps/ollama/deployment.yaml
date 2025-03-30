@@ -1,0 +1,7 @@
+We will create a deployment that will deploy Ollama, Ollama Web UI 
+
+We will also create a service for Ollama and the ollama web ui, the web ui should have LoadBalancer 
+
+We will also create a PVC for model downloads 
+
+The idea also will mean this can be used to interact via the web ui but also when we deploy postgres (pgvector) and a chat interface to interact with 
