@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ollama
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama
+  template:
+    metadata:
+      labels:
+        app: ollama
+    spec:
+      volumes:
+        - name: models-storage
+          persistentVolumeClaim:
+            claimName: ollama-models-pvc
+      initContainers:
+        - name: model-downloader
+          image: curlimages/curl:latest
+          command: ["sh", "-c", "curl -o /models/model.bin https://ollama.ai/models/sample-model.bin"]
+          volumeMounts:
+            - mountPath: /models
+              name: models-storage
+      containers:
+        - name: ollama
+          image: ollama/ollama:latest
+          ports:
+            - containerPort: 11434
+          volumeMounts:
+            - mountPath: /models
+              name: models-storage
