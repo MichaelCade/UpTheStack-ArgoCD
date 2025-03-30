@@ -18,10 +18,10 @@ spec:
             claimName: ollama-models-pvc
       initContainers:
         - name: model-downloader
-          image: curlimages/curl:latest
-          command: ["sh", "-c", "curl -o /models/model.bin https://ollama.ai/models/sample-model.bin"]
+          image: ollama/ollama:latest
+          command: ["/bin/sh", "-c", "ollama pull mistral"]
           volumeMounts:
-            - mountPath: /models
+            - mountPath: /root/.ollama/models
               name: models-storage
       containers:
         - name: ollama
@@ -29,5 +29,5 @@ spec:
           ports:
             - containerPort: 11434
           volumeMounts:
-            - mountPath: /models
+            - mountPath: /root/.ollama/models
               name: models-storage
