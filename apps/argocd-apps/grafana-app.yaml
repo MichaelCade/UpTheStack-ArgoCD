@@ -13,7 +13,7 @@ spec:
       chart: grafana/grafana 
       repoURL: https://charts.bitnami.com/bitnami
       valueFiles:
-        - ../monitoring/grafana-values.yaml
+        - ./monitoring/grafana-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
