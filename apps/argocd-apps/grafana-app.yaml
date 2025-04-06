@@ -8,10 +8,10 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: monitoring/grafana
+    path: apps/argocd-apps
     helm:
       valueFiles:
-        - values.yaml
+        - ../monitoring/grafana-values.yaml 
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
