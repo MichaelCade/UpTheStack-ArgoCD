@@ -8,10 +8,10 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: monitoring/perses
+    path: apps/argocd-apps
     helm:
       valueFiles:
-        - values.yaml
+        - ../monitoring/perses-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -19,3 +19,4 @@ spec:
     automated:
       selfHeal: true
       prune: true
+
