@@ -10,6 +10,8 @@ spec:
     targetRevision: main
     path: apps/argocd-apps
     helm:
+      chart: grafana/grafana     # <-- Remote chart reference
+      repoURL: https://charts.bitnami.com/bitnami 
       valueFiles:
         - ../monitoring/grafana-values.yaml 
   destination:
