@@ -10,6 +10,8 @@ spec:
     targetRevision: main
     path: apps/argocd-apps
     helm:
+      chart: perses/perses
+      repoURL: https://charts.perses.dev/
       valueFiles:
         - ../monitoring/perses-values.yaml
   destination:
@@ -19,4 +21,3 @@ spec:
     automated:
       selfHeal: true
       prune: true
-
