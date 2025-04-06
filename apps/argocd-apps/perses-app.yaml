@@ -13,7 +13,7 @@ spec:
       chart: perses/perses
       repoURL: https://charts.perses.dev/
       valueFiles:
-        - ../monitoring/perses-values.yaml
+        - ./monitoring/perses-values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
