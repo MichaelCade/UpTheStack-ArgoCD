@@ -1,0 +1,4 @@
+resources:
+  - prometheus-app.yaml
+  - grafana-app.yaml
+  - perses-app.yaml
