@@ -8,15 +8,12 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    # This should be the path to the folder where your Argo CD application manifests are.
-    # Since your application manifests are in `apps/argocd-apps`, this should point to `apps/argocd-apps`, and
-    # Argo CD will fetch the manifest from there.
-    path: apps/argocd-apps  # Directory containing your Argo CD application manifests (prometheus-app.yaml, etc.)
+    path: apps/argocd-apps/prometheus-app  # Path to the application manifest folder for Prometheus
     helm:
-      chart: prometheus-community/kube-prometheus-stack  # The remote Helm chart you want to use
-      repoURL: https://prometheus-community.github.io/helm-charts  # Remote Helm chart repository
+      chart: kube-prometheus-stack  # Helm chart name
+      repoURL: https://prometheus-community.github.io/helm-charts  # Prometheus Helm repo URL
       valueFiles:
-        - ./monitoring/prometheus-values.yaml  # Path to the values file relative to the root of the repository
+        - ./monitoring/prometheus-values.yaml  # Path to values.yaml for Prometheus
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
