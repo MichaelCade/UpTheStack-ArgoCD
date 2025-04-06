@@ -1,3 +1,4 @@
+# filepath: /Users/michaelcade/UpTheStack-ArgoCD/apps/argocd-apps/monitoring.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -10,7 +11,9 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: apps/argocd-apps
+    path: apps/monitoring  # Correct path to Kustomize directory
+    kustomize:
+      namePrefix: monitoring-
   project: default
   syncPolicy:
     automated:
