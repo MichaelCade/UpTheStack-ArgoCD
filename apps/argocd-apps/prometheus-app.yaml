@@ -8,12 +8,12 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: apps/argocd-apps
+    path: .  # Point to the root of your repository where Argo CD manifests are
     helm:
-      chart: prometheus-community/kube-prometheus-stack
-      repoURL: https://prometheus-community.github.io/helm-charts
+      chart: prometheus-community/kube-prometheus-stack  # Use the remote chart
+      repoURL: https://prometheus-community.github.io/helm-charts  # Correct repo URL
       valueFiles:
-        - ./monitoring/prometheus-values.yaml 
+        - ./monitoring/prometheus-values.yaml  # Path to the values file relative to the root of the repo
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
