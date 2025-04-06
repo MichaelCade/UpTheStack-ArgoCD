@@ -11,9 +11,9 @@ spec:
     path: apps/argocd-apps
     helm:
       chart: grafana/grafana     # <-- Remote chart reference
-      repoURL: https://charts.bitnami.com/bitnami 
-      valueFiles:
-        - ../monitoring/grafana-values.yaml 
+        repoURL: https://charts.bitnami.com/bitnami 
+        valueFiles:
+          - ../monitoring/grafana-values.yaml 
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
