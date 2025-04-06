@@ -1,1 +1,21 @@
+alertmanager:
+  enabled: true
+  service:
+    type: LoadBalancer
+
+server:
+  enabled: true
+  service:
+    type: LoadBalancer
+  global:
+    scrape_interval: 15s
+  retention: 15d
+  persistentVolume:
+    enabled: true
+    size: 8Gi
+
+pushgateway:
+  enabled: false
+
+extraScrapeConfigs: []
 
