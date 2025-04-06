@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: monitoring
+    path: apps/argocd-apps
   project: default
   syncPolicy:
     automated:
