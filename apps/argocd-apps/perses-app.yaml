@@ -8,12 +8,12 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: apps/argocd-apps
+    path: apps/monitoring  # Correct path to Perses values
     helm:
       chart: perses/perses
       repoURL: https://charts.perses.dev/
       valueFiles:
-        - ./monitoring/perses-values.yaml
+        - perses-values.yaml  # Ensure this file exists and is valid
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

@@ -8,12 +8,12 @@ spec:
   source:
     repoURL: https://github.com/MichaelCade/UpTheStack-ArgoCD.git
     targetRevision: main
-    path: apps/argocd-apps # Path to the application manifest folder for Prometheus
+    path: apps/monitoring  # Correct path to Prometheus values
     helm:
-      chart: kube-prometheus-stack  # Helm chart name
-      repoURL: https://prometheus-community.github.io/helm-charts  # Prometheus Helm repo URL
+      chart: kube-prometheus-stack
+      repoURL: https://prometheus-community.github.io/helm-charts
       valueFiles:
-        - ./monitoring/prometheus-values.yaml  # Path to values.yaml for Prometheus
+        - prometheus-values.yaml  # Ensure this file exists and is valid
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
