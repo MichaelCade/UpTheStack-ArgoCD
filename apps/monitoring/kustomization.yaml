@@ -1,4 +1,0 @@
-resources:
-  - grafana-values.yaml
-  - prometheus-values.yaml
-  - perses-values.yaml
