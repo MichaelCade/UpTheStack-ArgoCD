@@ -443,7 +443,7 @@ spec:
 
                  ##
                  # Veeam Backup & Replication Backup Objects. This part will check VBR Backup Objects
-                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupObjects?platformNameFilter=VMware"
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupObjects"
                  veeamVBRBObjectsUrl=$(curl -X GET "$veeamVBRURL" \
                    -H "Authorization: Bearer $veeamBearer" \
                    -H "accept: application/json" \
@@ -496,7 +496,7 @@ spec:
               - name: veeamBackupPort
                 value: "9419"
               - name: veeamAPIVersion
-                value: "1.2-rev0"
+                value: "1.2-rev1"
               - name: veeamUsername
                 valueFrom:
                   secretKeyRef:

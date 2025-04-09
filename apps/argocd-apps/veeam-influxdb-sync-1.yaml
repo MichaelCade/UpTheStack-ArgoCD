@@ -1,0 +1,445 @@
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: veeam-influxdb-sync
+  namespace: monitoring
+spec:
+  schedule: "*/5 * * * *" # Runs every 5 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: veeam-influxdb-sync
+            image: michaelcade1/custom-veeam-influxdb-sync:0.0.4
+            command: ["/bin/bash", "-c"]
+            args:
+              - |
+                 # Get the bearer token and HTTP status code
+                 response=$(curl -s -o /tmp/response.json -w "%{http_code}" -X POST "https://$veeamBackupServer:$veeamBackupPort/api/oauth2/token" \
+                   -H "accept: application/json" \
+                   -H "x-api-version: $veeamAPIVersion" \
+                   -H "Content-Type: application/x-www-form-urlencoded" \
+                   -d "grant_type=password&username=$veeamUsername&password=$veeamPassword" \
+                   -k)
+                 
+                 veeamBearertmp=$(</tmp/response.json)
+                 rm /tmp/response.json
+                 http_status=$response
+                 
+                 case $http_status in
+                     200)
+                         veeamBearer=$(echo "$veeamBearertmp" | jq -r '.access_token')
+                         if [ -n "$veeamBearer" ] && [ "$veeamBearer" != "null" ]; then
+                             echo "Successfully obtained bearer token"
+                         else
+                             echo "Bearer token was not found in the response."
+                             exit 1
+                         fi
+                         ;;
+                     400)
+                         # Parse error message
+                         errorMessage=$(echo "$veeamBearertmp" | jq -r '.message')
+                         echo "Bad request: $errorMessage"
+                         exit 1
+                         ;;
+                     401)
+                         errorMessage=$(echo "$veeamBearertmp" | jq -r '.message')
+                         echo "Unauthorized: $errorMessage"
+                         exit 1
+                         ;;
+                     403)
+                         errorMessage=$(echo "$veeamBearertmp" | jq -r '.message')
+                         echo "Forbidden: $errorMessage"
+                         exit 1
+                         ;;
+                     500)
+                         errorMessage=$(echo "$veeamBearertmp" | jq -r '.message')
+                         echo "Internal server error: $errorMessage"
+                         exit 1
+                         ;;
+                     *)
+                         echo "An unexpected error occurred with HTTP status code: $http_status."
+                         exit 1
+                         ;;
+                 esac
+                 
+                 ##
+                 # Veeam Backup & Replication Information. This part will check VBR Information
+                 ##
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/serverInfo"
+                 veeamVBRInfoUrl=$(curl -X GET $veeamVBRURL \
+                   -H "Authorization: Bearer $veeamBearer" \
+                   -H  "accept: application/json" \
+                   -H  "x-api-version: $veeamAPIVersion" \
+                   2>&1 -k --silent)
+                 
+                     veeamVBRId=$(echo "$veeamVBRInfoUrl" | jq --raw-output ".vbrId")
+                     veeamVBRName=$(echo "$veeamVBRInfoUrl" | jq --raw-output ".name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                     veeamVBRVersion=$(echo "$veeamVBRInfoUrl" | jq --raw-output ".buildVersion") 
+                     veeamDatabaseVendor=$(echo "$veeamVBRInfoUrl" | jq --raw-output ".databaseVendor" | awk '{gsub(/([ ,])/,"\\\\&");print}') 
+                 
+                     #echo "veeam_vbr_info,veeamVBRId=$veeamVBRId,veeamVBRName=$veeamVBRName,veeamVBRVersion=$veeamVBRVersion,veeamDatabaseVendor=$veeamDatabaseVendor vbr=1"
+                 
+                     ##Comment the influx write while debugging
+                     echo "Writing veeam_vbr_info to InfluxDB"
+                     influx write \
+                     -t "$veeamInfluxDBToken" \
+                     -b "$veeamInfluxDBBucket" \
+                     -o "$veeamInfluxDBOrg" \
+                     -p s \
+                     --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                     "veeam_vbr_info,veeamVBRId=$veeamVBRId,veeamVBRName=$veeamVBRName,veeamVBRVersion=$veeamVBRVersion,veeamVBR=$veeamBackupServer,veeamDatabaseVendor=$veeamDatabaseVendor vbr=1"
+                 
+                 ##
+                 # Veeam Backup & Replication Sessions. This part will check VBR Sessions
+                 ##
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/sessions"
+                 veeamVBRSessionsUrl=$(curl -X GET $veeamVBRURL \
+                   -H "Authorization: Bearer $veeamBearer" \
+                   -H  "accept: application/json" \
+                   -H  "x-api-version: $veeamAPIVersion" \
+                   2>&1 -k --silent)
+                 
+                 declare -i arrayjobsessions=0
+                 if [[ "$veeamVBRSessionsUrl" == "[]" ]]; then
+                     echo "There are not new veeam_vbr_sessions since $timestart"
+                 else
+                     for id in $(echo "$veeamVBRSessionsUrl" | jq -r '.data[].id'); do
+                         veeamVBRSessionJobName=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].name" | awk '{gsub(/([ ,])/,"\\\\&");print}') 
+                         veeamVBRSessiontype=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].sessionType") 
+                         veeamVBRSessionsJobState=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].state")
+                         veeamVBRSessionsJobResult=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].result.result")     
+                         case $veeamVBRSessionsJobResult in
+                             Success)
+                                 jobStatus="1"
+                             ;;
+                             Warning)
+                                 jobStatus="2"
+                             ;;
+                             Failed)
+                                 jobStatus="3"
+                             ;;
+                             esac
+                         veeamVBRSessionsJobResultMessage=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].result.message" | awk -F"." 'NR==1{print $1}' | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         [[ ! -z "$veeamVBRSessionsJobResultMessage" ]] || veeamVBRSessionsJobResultMessage="None"
+                         veeamVBRSessionCreationTime=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].creationTime")
+                         creationTimeUnix=$(date -d "$veeamVBRSessionCreationTime" +"%s")
+                         veeamVBRSessionEndTime=$(echo "$veeamVBRSessionsUrl" | jq --raw-output ".data[$arrayjobsessions].endTime")
+                         endTimeUnix=$(date -d "$veeamVBRSessionEndTime" +"%s")
+                         veeamBackupSessionsTimeDuration=$(($endTimeUnix-$creationTimeUnix))
+                 
+                         #echo "veeam_vbr_sessions,veeamVBRSessionJobName=$veeamVBRSessionJobName,veeamVBR=$veeamBackupServer,veeamVBRSessiontype=$veeamVBRSessiontype,veeamVBRSessionsJobState=$veeamVBRSessionsJobState,veeamVBRSessionsJobResultMessage=$veeamVBRSessionsJobResultMessage veeamVBRSessionsJobResult=$jobStatus,veeamBackupSessionsTimeDuration=$veeamBackupSessionsTimeDuration $endTimeUnix"
+                         
+                         ##Comment the influx write while debugging
+                         echo "Writing veeam_vbr_sessions to InfluxDB"
+                         influx write \
+                         -t "$veeamInfluxDBToken" \
+                         -b "$veeamInfluxDBBucket" \
+                         -o "$veeamInfluxDBOrg" \
+                         -p s \
+                         --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                         "veeam_vbr_sessions,veeamVBR=$veeamBackupServer,veeamVBRSessionJobName=$veeamVBRSessionJobName,veeamVBRSessiontype=$veeamVBRSessiontype,veeamVBRSessionsJobState=$veeamVBRSessionsJobState,veeamVBRSessionsJobResultMessage=$veeamVBRSessionsJobResultMessage veeamVBRSessionsJobResult=$jobStatus,veeamBackupSessionsTimeDuration=$veeamBackupSessionsTimeDuration $endTimeUnix"
+                         
+                         if [[ $arrayjobsessions = $veeamJobSessions ]]; then
+                             break
+                             else
+                                 arrayjobsessions=$arrayjobsessions+1
+                         fi
+                     done
+                 fi
+                 
+                 ##
+                 # Veeam Backup & Replication Managed Servers. This part will check VBR Managed Servers. Combine this with telegraf agent for beautiful CPU/RAM consumption
+                 ##
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupInfrastructure/managedServers"
+                 veeamVBRManagedServersUrl=$(curl -X GET $veeamVBRURL \
+                   -H "Authorization: Bearer $veeamBearer" \
+                   -H  "accept: application/json" \
+                   -H  "x-api-version: $veeamAPIVersion" \
+                   2>&1 -k --silent)
+                 
+                 declare -i arraymanagedservers=0
+                 if [[ "$veeamVBRManagedServersUrl" == "[]" ]]; then
+                     echo "There are not managed servers "
+                 else
+                     for id in $(echo "$veeamVBRManagedServersUrl" | jq -r '.data[].id'); do
+                         veeamVBRMSName=$(echo "$veeamVBRManagedServersUrl" | jq --raw-output ".data[$arraymanagedservers].name" | awk '{gsub(/([ ,])/,"\\\\&");print}') 
+                         veeamVBRMStype=$(echo "$veeamVBRManagedServersUrl" | jq --raw-output ".data[$arraymanagedservers].type") 
+                         veeamVBRMSDescription=$(echo "$veeamVBRManagedServersUrl" | jq --raw-output ".data[$arraymanagedservers].description" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         [[ ! -z "$veeamVBRMSDescription" ]] || veeamVBRMSDescription="None"
+                 
+                         #echo "veeam_vbr_managedservers,veeamVBRMSName=$veeamVBRMSName,veeamVBRMStype=$veeamVBRMStype,veeamVBRMSDescription=$veeamVBRMSDescription veeamVBRMSInternalID=$arraymanagedservers"
+                 
+                         ##Comment the influx write while debugging
+                         echo "Writing veeam_vbr_managedservers to InfluxDB"
+                         influx write \
+                         -t "$veeamInfluxDBToken" \
+                         -b "$veeamInfluxDBBucket" \
+                         -o "$veeamInfluxDBOrg" \
+                         -p s \
+                         --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                         "veeam_vbr_managedservers,veeamVBR=$veeamBackupServer,veeamVBRMSName=$veeamVBRMSName,veeamVBRMStype=$veeamVBRMStype,veeamVBRMSDescription=$veeamVBRMSDescription veeamVBRMSInternalID=$arraymanagedservers"
+                 
+                         arraymanagedservers=$arraymanagedservers+1
+                         
+                     done
+                 fi
+                 
+                 ##
+                 # Veeam Backup & Replication Repositories. This part will check VBR Repositories
+                 ##
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupInfrastructure/repositories"
+                 veeamVBRRepositoriesUrl=$(curl -X GET "$veeamVBRURL" \
+                   -H "Authorization: Bearer $veeamBearer" \
+                   -H "accept: application/json" \
+                   -H "x-api-version: $veeamAPIVersion" \
+                   -k --silent)
+                 
+                 if [[ "$veeamVBRRepositoriesUrl" == "[]" ]]; then
+                   echo "There are no repositories"
+                 else
+                   declare -A processed_repositories  # To track unique repositories by name or ID
+                 
+                   for id in $(echo "$veeamVBRRepositoriesUrl" | jq -r '.data[].id'); do
+                     veeamVBRRepoName=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                     veeamVBRRepotype=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").type")
+                     veeamVBRRepoDescription=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").description" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                 
+                     # Fetch and calculate the capacity, free space, and used space
+                     veeamVBRRepoStateUrl=$(curl -X GET "https://$veeamBackupServer:$veeamBackupPort/api/v1/backupInfrastructure/repositories/states?idFilter=$id" \
+                       -H "Authorization: Bearer $veeamBearer" \
+                       -H "accept: application/json" \
+                       -H "x-api-version: $veeamAPIVersion" \
+                       -k --silent)
+                 
+                     veeamVBRRepoCapacity=$(echo "$veeamVBRRepoStateUrl" | jq --raw-output ".data[] | select(.id==\"$id\").capacityGB" | awk '{printf "%.0f\n", $1 * 1024 * 1024 * 1024}')
+                     veeamVBRRepoFree=$(echo "$veeamVBRRepoStateUrl" | jq --raw-output ".data[] | select(.id==\"$id\").freeGB" | awk '{printf "%.0f\n", $1 * 1024 * 1024 * 1024}')
+                     veeamVBRRepoUsed=$(echo "$veeamVBRRepoStateUrl" | jq --raw-output ".data[] | select(.id==\"$id\").usedSpaceGB" | awk '{printf "%.0f\n", $1 * 1024 * 1024 * 1024}')
+                 
+                     # Skip duplicate repositories
+                     if [[ -n "${processed_repositories[$veeamVBRRepoName]}" ]]; then
+                       echo "Skipping duplicate repository $veeamVBRRepoName"
+                       continue
+                     fi
+                     processed_repositories["$veeamVBRRepoName"]=1
+                 
+                     # Handle repository types
+                     case "$veeamVBRRepotype" in
+                       "WinLocal"|"LinuxHardened"|"Nfs"|"Smb")
+                         # Skip repositories with no size or data for these types
+                         if [[ -z "$veeamVBRRepoCapacity" || "$veeamVBRRepoCapacity" -eq 0 ]]; then
+                           echo "Skipping repository $veeamVBRRepoName (no data or size)"
+                           continue
+                         fi
+                         ;;
+                       "S3Compatible"|"WasabiCloud"|"AmazonS3"|"AzureBlob"|"GoogleCloud")
+                         # Object storage repositories are allowed to have 0 capacity
+                         echo "Processing object storage repository $veeamVBRRepoName (capacity may be 0)"
+                         ;;
+                       *)
+                         echo "Unknown repository type: $veeamVBRRepotype"
+                         continue
+                         ;;
+                     esac
+                 
+                     # Construct the InfluxDB data string based on repository type
+                     case "$veeamVBRRepotype" in
+                       "WinLocal")
+                         veeamVBRRepopath=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").repository.path" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoPerVM=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").repository.advancedSettings.perVmBackup")
+                         veeamVBRRepoMaxtasks=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").repository.maxTaskCount")
+                         influxData="veeam_vbr_repositories,veeamVBR=$veeamBackupServer,veeamVBRRepoName=$veeamVBRRepoName,veeamVBRRepotype=$veeamVBRRepotype,veeamVBRMSDescription=$veeamVBRRepoDescription,veeamVBRRepopath=$veeamVBRRepopath,veeamVBRRepoPerVM=$veeamVBRRepoPerVM veeamVBRRepoMaxtasks=$veeamVBRRepoMaxtasks,veeamVBRRepoCapacity=$veeamVBRRepoCapacity,veeamVBRRepoFree=$veeamVBRRepoFree,veeamVBRRepoUsed=$veeamVBRRepoUsed"
+                         ;;
+                        "LinuxHardened")
+                         veeamVBRRepopath=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").repository.path" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoXFS=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").repository.useFastCloningOnXFSVolumes")
+                         influxData="veeam_vbr_repositories,veeamVBR=$veeamBackupServer,veeamVBRRepoName=$veeamVBRRepoName,veeamVBRRepotype=$veeamVBRRepotype,veeamVBRMSDescription=$veeamVBRRepoDescription,veeamVBRRepopath=$veeamVBRRepopath,veeamVBRRepoXFS=$veeamVBRRepoXFS veeamVBRRepoCapacity=$veeamVBRRepoCapacity,veeamVBRRepoFree=$veeamVBRRepoFree,veeamVBRRepoUsed=$veeamVBRRepoUsed"
+                         ;;
+                       "S3Compatible"|"WasabiCloud"|"AmazonS3")
+                         veeamVBRRepoServicePoint=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").account.servicePoint" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoRegion=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").account.regionId" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoBucketName=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").bucket.bucketName" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         influxData="veeam_vbr_repositories,veeamVBR=$veeamBackupServer,veeamVBRRepoName=$veeamVBRRepoName,veeamVBRRepotype=$veeamVBRRepotype,veeamVBRMSDescription=$veeamVBRRepoDescription,veeamVBRRepoServicePoint=$veeamVBRRepoServicePoint,veeamVBRRepoRegion=$veeamVBRRepoRegion,veeamVBRRepoBucketName=$veeamVBRRepoBucketName veeamVBRRepoCapacity=$veeamVBRRepoCapacity,veeamVBRRepoFree=$veeamVBRRepoFree,veeamVBRRepoUsed=$veeamVBRRepoUsed"
+                         ;;
+                       "AzureBlob")
+                         veeamVBRRepoContainer=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").container.name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoAccountName=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").account.name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         influxData="veeam_vbr_repositories,veeamVBR=$veeamBackupServer,veeamVBRRepoName=$veeamVBRRepoName,veeamVBRRepotype=$veeamVBRRepotype,veeamVBRMSDescription=$veeamVBRRepoDescription,veeamVBRRepoContainer=$veeamVBRRepoContainer,veeamVBRRepoAccountName=$veeamVBRRepoAccountName veeamVBRRepoCapacity=$veeamVBRRepoCapacity,veeamVBRRepoFree=$veeamVBRRepoFree,veeamVBRRepoUsed=$veeamVBRRepoUsed"
+                         ;;
+                       "GoogleCloud")
+                         veeamVBRRepoBucketName=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").bucket.bucketName" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         veeamVBRRepoProject=$(echo "$veeamVBRRepositoriesUrl" | jq --raw-output ".data[] | select(.id==\"$id\").project.name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         influxData="veeam_vbr_repositories,veeamVBR=$veeamBackupServer,veeamVBRRepoName=$veeamVBRRepoName,veeamVBRRepotype=$veeamVBRRepotype,veeamVBRMSDescription=$veeamVBRRepoDescription,veeamVBRRepoBucketName=$veeamVBRRepoBucketName,veeamVBRRepoProject=$veeamVBRRepoProject veeamVBRRepoCapacity=$veeamVBRRepoCapacity,veeamVBRRepoFree=$veeamVBRRepoFree,veeamVBRRepoUsed=$veeamVBRRepoUsed"
+                         ;;
+                     esac
+                 
+                     # Write data to InfluxDB
+                     echo "Writing repository $veeamVBRRepoName to InfluxDB"
+                     influx write \
+                       -t "$veeamInfluxDBToken" \
+                       -b "$veeamInfluxDBBucket" \
+                       -o "$veeamInfluxDBOrg" \
+                       -p s \
+                       --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                       "$influxData"
+                   done
+                 fi
+                 
+                 
+                 ##
+                 # Veeam Backup & Replication Proxies. This part will check VBR Proxies
+                 ##
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupInfrastructure/proxies"
+                 veeamVBRProxiesUrl=$(curl -X GET $veeamVBRURL \
+                   -H "Authorization: Bearer $veeamBearer" \
+                   -H  "accept: application/json" \
+                   -H  "x-api-version: $veeamAPIVersion" \
+                   2>&1 -k --silent)
+                 
+                 declare -i arrayproxies=0
+                 if [[ "$veeamVBRProxiesUrl" == "[]" ]]; then
+                     echo "There are not Proxies"
+                 else
+                     for id in $(echo "$veeamVBRProxiesUrl" | jq -r '.data[].id'); do
+                         veeamVBRProxyName=$(echo "$veeamVBRProxiesUrl" | jq --raw-output ".data[$arrayproxies].name" | awk '{gsub(/([ ,])/,"\\\\&");print}') 
+                         veeamVBRProxytype=$(echo "$veeamVBRProxiesUrl" | jq --raw-output ".data[$arrayproxies].type") 
+                         veeamVBRProxyDescription=$(echo "$veeamVBRProxiesUrl" | jq --raw-output ".data[$arrayproxies].description" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                         [[ ! -z "$veeamVBRProxyDescription" ]] || veeamVBRProxyDescription="None"
+                         veeamVBRProxyMode=$(echo "$veeamVBRProxiesUrl" | jq --raw-output ".data[$arrayproxies].server.transportMode")
+                         veeamVBRProxyTask=$(echo "$veeamVBRProxiesUrl" | jq --raw-output ".data[$arrayproxies].server.maxTaskCount")
+                 
+                         #echo "veeam_vbr_proxies,veeamVBRProxyName=$veeamVBRProxyName,veeamVBRProxytype=$veeamVBRProxytype,veeamVBRProxyDescription=$veeamVBRProxyDescription,veeamVBRProxyMode=$veeamVBRProxyMode veeamVBRProxyTask=$veeamVBRProxyTask"
+                 
+                         ##Comment the influx write while debugging
+                         echo "Writing veeam_vbr_proxies to InfluxDB"
+                         influx write \
+                         -t "$veeamInfluxDBToken" \
+                         -b "$veeamInfluxDBBucket" \
+                         -o "$veeamInfluxDBOrg" \
+                         -p s \
+                         --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                         "veeam_vbr_proxies,veeamVBR=$veeamBackupServer,veeamVBRProxyName=$veeamVBRProxyName,veeamVBRProxytype=$veeamVBRProxytype,veeamVBRProxyDescription=$veeamVBRProxyDescription,veeamVBRProxyMode=$veeamVBRProxyMode veeamVBRProxyTask=$veeamVBRProxyTask"
+                 
+                 
+                     arrayproxies+=1
+                         
+                     done
+                 fi
+                 
+                 ##
+                 # Veeam Backup & Replication Backup Objects. This part will check VBR Backup Objects
+                 ##
+                 # Define the list of platforms to query
+                 platforms=("VMware" "HyperV" "WindowsPhysical" "LinuxPhysical" "UnstructuredData" "EntraID" "CustomPlatform")
+                 
+                 # Loop through each platform
+                 for platform in "${platforms[@]}"; do
+                   echo "Querying platform: $platform"
+                 
+                   # Construct the API URL with the platform filter
+                   veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupObjects?platformNameFilter=$platform"
+                   
+                   # Make the API call
+                   veeamVBRBObjectsUrl=$(curl -X GET "$veeamVBRURL" \
+                     -H "Authorization: Bearer $veeamBearer" \
+                     -H "accept: application/json" \
+                     -H "x-api-version: $veeamAPIVersion" \
+                     -k --silent)
+                 
+                   # Debug: Print the raw API response
+                   echo "Raw API Response for $platform: $veeamVBRBObjectsUrl"
+                 
+                   # Check if the response is null or empty
+                   if [[ -z "$veeamVBRBObjectsUrl" || "$veeamVBRBObjectsUrl" == "null" ]]; then
+                     echo "API response for $platform is empty or null. Skipping."
+                     continue
+                   fi
+                 
+                   # Check for errors in the API response
+                   if echo "$veeamVBRBObjectsUrl" | jq -e '.errorCode' >/dev/null; then
+                     errorMessage=$(echo "$veeamVBRBObjectsUrl" | jq -r '.message')
+                     echo "API returned an error for $platform: $errorMessage"
+                     continue
+                   fi
+                 
+                   # Process the valid response
+                   declare -i arraybobjects=0
+                   for id in $(echo "$veeamVBRBObjectsUrl" | jq -r '.data[].id'); do
+                     veeamVBRBobjectName=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].name" | awk '{gsub(/([ ,])/,"\\\\&");print}')
+                     veeamVBRBobjecttype=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].type")
+                     veeamVBRBobjectPlatform=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].platformName")
+                     veeamVBRBobjectviType=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].viType")
+                     veeamVBRBobjectObjectId=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].objectId")
+                     veeamVBRBobjectPath=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].path" | awk '{gsub(/([ ,\n])/,"\\\\&");print}')
+                     [[ ! -z "$veeamVBRBobjectPath" ]] || veeamVBRBobjectPath="None"
+                     veeamVBRBobjectrp=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].restorePointsCount")
+                 
+                     # Write data to InfluxDB
+                     echo "Writing veeam_vbr_backupobjects for $platform to InfluxDB"
+                     influx write \
+                       -t "$veeamInfluxDBToken" \
+                       -b "$veeamInfluxDBBucket" \
+                       -o "$veeamInfluxDBOrg" \
+                       -p s \
+                       --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
+                       "veeam_vbr_backupobjects,veeamVBR=$veeamBackupServer,veeamVBRBobjectName=$veeamVBRBobjectName,veeamVBRBobjecttype=$veeamVBRBobjecttype,veeamVBRBobjectPlatform=$veeamVBRBobjectPlatform,veeamVBRBobjectviType=$veeamVBRBobjectviType,veeamVBRBobjectObjectId=$veeamVBRBobjectObjectId,veeamVBRBobjectPath=$veeamVBRBobjectPath restorePointsCount=$veeamVBRBobjectrp"
+                 
+                     arraybobjects+=1
+                   done
+                 done
+
+
+
+
+
+            env:
+              - name: veeamInfluxDBURL
+                value: "http://influxdb-influxdb2.monitoring.svc.cluster.local"
+              - name: veeamInfluxDBPort
+                value: "80"
+              - name: veeamInfluxDBBucket
+                value: "veeam"
+              - name: veeamInfluxDBOrg
+                value: "influxdata"
+              - name: veeamBackupServer
+                value: "192.168.169.185"
+              - name: veeamBackupPort
+                value: "9419"
+              - name: veeamAPIVersion
+                value: "1.2-rev1"
+              - name: veeamUsername
+                valueFrom:
+                  secretKeyRef:
+                    name: veeam-influxdb-sync-secret
+                    key: veeamUsername
+              - name: veeamPassword
+                valueFrom:
+                  secretKeyRef:
+                    name: veeam-influxdb-sync-secret
+                    key: veeamPassword
+              - name: veeamInfluxDBToken
+                valueFrom:
+                  secretKeyRef:
+                    name: veeam-influxdb-sync-secret
+                    key: veeamInfluxDBToken
+            volumeMounts:
+              - mountPath: /tmp
+                name: tmp-dir
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop:
+                  - ALL
+              runAsNonRoot: true
+              seccompProfile:
+                type: RuntimeDefault
+          volumes:
+          - name: tmp-dir
+            emptyDir: {}
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 3000
+            fsGroup: 2000
