@@ -443,49 +443,28 @@ spec:
 
                  ##
                  # Veeam Backup & Replication Backup Objects. This part will check VBR Backup Objects
-                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupObjects"
+                 veeamVBRURL="https://$veeamBackupServer:$veeamBackupPort/api/v1/backupObjects?platformNameFilter=VMware"
                  veeamVBRBObjectsUrl=$(curl -X GET "$veeamVBRURL" \
                    -H "Authorization: Bearer $veeamBearer" \
                    -H "accept: application/json" \
                    -H "x-api-version: $veeamAPIVersion" \
                    2>&1 -k --silent)
                  
-                 # Check if there's an error in the response
-                 if echo "$veeamVBRBObjectsUrl" | jq -e '.errorCode' >/dev/null; then
-                   # Check if it's the specific error we want to skip
-                   if echo "$veeamVBRBObjectsUrl" | jq -e '.message' | grep -q "Enum value EMongoDb is not present"; then
-                     echo "Skipping Backup Objects processing due to API error: Enum value EMongoDb is not present."
-                     exit 0  # Exit gracefully and skip this processing section
-                   else
-                     # If another error occurs, print it and exit the script
-                     echo "API returned an error:"
-                     echo "$veeamVBRBObjectsUrl" | jq .
-                     exit 1  # Exit the script in case of other errors
-                   fi
-                 fi
-                 
-                 # If no error, proceed with backup objects processing
-                 echo "Raw JSON Response for Backup Objects:"
-                 echo "$veeamVBRBObjectsUrl" | jq .
-                 
-                 # Check if the response is null or empty before proceeding
-                 if [[ "$veeamVBRBObjectsUrl" == "null" || -z "$veeamVBRBObjectsUrl" ]]; then
-                   echo "No backup objects found. Skipping further processing."
+                 declare -i arraybobjects=0
+                 if [[ "$veeamVBRBObjectsUrl" == "[]" ]]; then
+                     echo "There are not Proxies"
                  else
-                   # Process the valid response
-                   for id in $(echo "$veeamVBRBObjectsUrl" | jq -r '.data[].id'); do
-                     veeamVBRBobjectName=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").name")
-                     veeamVBRBobjecttype=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").type")
-                     veeamVBRBobjectPlatform=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").platformName")
-                     veeamVBRBobjectviType=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").viType")
-                     veeamVBRBobjectObjectId=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").objectId")
-                     veeamVBRBobjectPath=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").path")
-                     veeamVBRBobjectrp=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[] | select(.id==\"$id\").restorePointsCount")
+                     for id in $(echo "$veeamVBRBObjectsUrl" | jq -r '.data[].id'); do
+                         veeamVBRBobjectName=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].name" | awk '{gsub(/([ ,])/,"\\\\&");print}') 
+                         veeamVBRBobjecttype=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].type") 
+                         veeamVBRBobjectPlatform=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].platformName")
+                         veeamVBRBobjectviType=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].viType")
+                         veeamVBRBobjectObjectId=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].objectId")
+                         veeamVBRBobjectPath=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].path" | awk '{gsub(/([ ,\n])/,"\\\\&");print}')
+                         [[ ! -z "$veeamVBRBobjectPath" ]] || veeamVBRBobjectPath="None"
+                         veeamVBRBobjectrp=$(echo "$veeamVBRBObjectsUrl" | jq --raw-output ".data[$arraybobjects].restorePointsCount")
                  
-                     # Handle missing or invalid data
-                     [[ -z "$veeamVBRBobjectName" ]] && veeamVBRBobjectName="Unknown"
-                     [[ -z "$veeamVBRBobjectPath" ]] && veeamVBRBobjectPath="None"
-                     [[ -z "$veeamVBRBobjectrp" ]] && veeamVBRBobjectrp=0
+                         #echo "veeam_vbr_backupobjects,veeamVBRBobjectName=$veeamVBRBobjectName,veeamVBRBobjecttype=$veeamVBRBobjecttype,veeamVBRBobjectPlatform=$veeamVBRBobjectPlatform,veeamVBRBobjectviType=$veeamVBRBobjectviType,veeamVBRBobjectObjectId=$veeamVBRBobjectObjectId,veeamVBRBobjectPath=$veeamVBRBobjectPath restorePointsCount=$veeamVBRBobjectrp"
                  
                      # Write data to InfluxDB
                      echo "Writing veeam_vbr_backupobjects to InfluxDB"
@@ -495,13 +474,9 @@ spec:
                        -o "$veeamInfluxDBOrg" \
                        -p s \
                        --host "$veeamInfluxDBURL:$veeamInfluxDBPort" \
-                       "veeam_vbr_backupobjects,veeamVBR=$veeamBackupServer,veeamVBRBobjectName=$veeamVBRBobjectName,veeamVBRBobjecttype=$veeamVBRBobjecttype,veeamVBRBobjectPlatform=$veeamVBRBobjectPlatform,veeamVBRBobjectviType=$veeamVBRBobjectviType,veeamVBRBobjectObjectId=$veeamVBRBobjectObjectId,veeamVBRBobjectPath=$veeamVBRBobjectPath restorePointsCount=$veeamVBRBobjectrp" \
-                       2>> /tmp/influx_write_errors.log
+                         "$(echo "veeam_vbr_backupobjects,veeamVBR=$veeamBackupServer,veeamVBRBobjectName=$veeamVBRBobjectName,veeamVBRBobjecttype=$veeamVBRBobjecttype,veeamVBRBobjectPlatform=$veeamVBRBobjectPlatform,veeamVBRBobjectviType=$veeamVBRBobjectviType,veeamVBRBobjectObjectId=$veeamVBRBobjectObjectId,veeamVBRBobjectPath=$veeamVBRBobjectPath restorePointsCount=$veeamVBRBobjectrp" | sed "s/'/'\\\\''/g")"
                  
-                     # Check for errors in the write command
-                     if [[ $? -ne 0 ]]; then
-                       echo "Error writing to InfluxDB. Check /tmp/influx_write_errors.log for details."
-                     fi
+                   arraybobjects+=1
                    done
                  fi
                  
