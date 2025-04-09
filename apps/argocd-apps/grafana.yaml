@@ -18,6 +18,8 @@ spec:
       values: |
         service:
           type: LoadBalancer
+        annotations:
+          DS_INFLUXDB: "InfluxDB"
         datasources:
           datasources.yaml:
             apiVersion: 1
@@ -26,11 +28,18 @@ spec:
                 type: prometheus
                 url: http://prometheus-server.monitoring.svc.cluster.local
                 access: proxy
-                isDefault: true
-              - name: loki
-                type: loki
-                url: http://loki.monitoring.svc.cluster.local
+
+              - name: InfluxDB
+                type: influxdb
+                url: http://influxdb-influxdb2.monitoring.svc.cluster.local:80
                 access: proxy
+                isDefault: true
+                jsonData:
+                  organization: "influxdata"
+                  defaultBucket: "veeam" 
+                  version: "Flux"
+                secureJsonData:
+                  token: "97RCYTlnEfgl67xI6E3gIfU75j9Pk37w"
         dashboardProviders:
           dashboardproviders.yaml:
             apiVersion: 1
