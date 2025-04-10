@@ -58,7 +58,7 @@ spec:
               gnetId: 10000
               revision: 1
               datasource: Prometheus
-            veeam: 
+            veeam-dashboard: 
               gnetId: 18854
               revision: 6
               datasource: InfluxDB # Explicitly set InfluxDB as the datasource
