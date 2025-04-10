@@ -64,7 +64,8 @@ spec:
               gnetId: 18854
               revision: 6
               datasource: InfluxDB
-              uid: InfluxDB
+              postProcess: | 
+                sed 's/\${DS_INFLUXDB}/InfluxDB/g'
         
   syncPolicy:
     automated:
