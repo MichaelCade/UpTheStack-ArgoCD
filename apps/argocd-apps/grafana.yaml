@@ -24,21 +24,25 @@ spec:
           datasources.yaml:
             apiVersion: 1
             datasources:
+
               - name: Prometheus
                 type: prometheus
                 url: http://prometheus-server.monitoring.svc.cluster.local
                 access: proxy
+
               - name: InfluxDB
                 type: influxdb
                 url: http://influxdb-influxdb2.monitoring.svc.cluster.local:80
                 access: proxy
                 isDefault: true
+                uid: InfluxDB
                 jsonData:
                   organization: "influxdata"
                   defaultBucket: "veeam" 
                   version: "Flux"
                 secureJsonData:
                   token: "97RCYTlnEfgl67xI6E3gIfU75j9Pk37w"
+
         dashboardProviders:
           dashboardproviders.yaml:
             apiVersion: 1
@@ -53,14 +57,29 @@ spec:
                   path: /var/lib/grafana/dashboards/default
         dashboards:
           default:
+
             kubernetes:
               gnetId: 10000
               revision: 1
               datasource: Prometheus
-            veeam-dashboard: 
+
+            veeam-dashboard:
+              json: |
+                {
+                "dashboard": {
+                  "title": "Veeam Dashboard", 
+                  "datasource": {
+                    "type": "influxdb",
+                    "uid": "InfluxDB"
+                 }
+              } 
               gnetId: 18854
               revision: 6
-              datasource: InfluxDB  
+              datasource: InfluxDB
+              inputValues:  # Map the placeholder to the correct datasource
+                - name: DS_INFLUXDB
+                  value: InfluxDB
+        
   syncPolicy:
     automated:
       prune: true
