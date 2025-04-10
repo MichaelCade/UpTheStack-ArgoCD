@@ -28,7 +28,6 @@ spec:
                 type: prometheus
                 url: http://prometheus-server.monitoring.svc.cluster.local
                 access: proxy
-
               - name: InfluxDB
                 type: influxdb
                 url: http://influxdb-influxdb2.monitoring.svc.cluster.local:80
@@ -61,8 +60,7 @@ spec:
             veeam-dashboard: 
               gnetId: 18854
               revision: 6
-              datasource: InfluxDB # Explicitly set InfluxDB as the datasource
-              
+              datasource: InfluxDB  
   syncPolicy:
     automated:
       prune: true
