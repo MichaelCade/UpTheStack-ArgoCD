@@ -64,19 +64,10 @@ spec:
               datasource: Prometheus
 
             veeam-dashboard:
-              json: |
-                {
-                "dashboard": {
-                  "title": "Veeam Dashboard", 
-                  "datasource": {
-                    "type": "influxdb",
-                    "uid": "InfluxDB"
-                 }
-              } 
               gnetId: 18854
               revision: 6
               datasource: InfluxDB
-              inputValues:  # Map the placeholder to the correct datasource
+              inputValues:
                 - name: DS_INFLUXDB
                   value: InfluxDB
         
