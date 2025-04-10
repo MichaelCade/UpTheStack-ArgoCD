@@ -61,21 +61,7 @@ spec:
               datasource: Prometheus
 
             veeam-dashboard:
-              gnetId: 18854
-              revision: 6
-              datasource: InfluxDB
-
-        downloadDashboards:
-          env:
-            DS_INFLUXDB: "InfluxDB"
-          resources: {}
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-              - ALL
-            seccompProfile:
-              type: RuntimeDefault
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/veeam-dashboard.yaml
         
   syncPolicy:
     automated:
