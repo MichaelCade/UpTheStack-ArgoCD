@@ -64,8 +64,18 @@ spec:
               gnetId: 18854
               revision: 6
               datasource: InfluxDB
-              postProcess: | 
-                sed 's/\${DS_INFLUXDB}/InfluxDB/g'
+
+        downloadDashboards:
+          env:
+            DS_INFLUXDB: "InfluxDB"
+          resources: {}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            seccompProfile:
+              type: RuntimeDefault
         
   syncPolicy:
     automated:
