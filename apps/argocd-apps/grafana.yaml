@@ -58,6 +58,11 @@ spec:
               gnetId: 10000
               revision: 1
               datasource: Prometheus
+            veeam: 
+              gnetId: 18854
+              revision: 1
+              datasource: InfluxDB # Explicitly set InfluxDB as the datasource
+              
   syncPolicy:
     automated:
       prune: true
