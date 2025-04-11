@@ -18,6 +18,8 @@ spec:
       values: |
         service:
           type: LoadBalancer
+        persistence:
+          enabled: true
         datasources:
           datasources.yaml:
             apiVersion: 1
@@ -27,15 +29,24 @@ spec:
                 type: prometheus
                 url: http://prometheus-server.monitoring.svc.cluster.local
                 access: proxy
+                isDefault: true
+
+              - name: K10-Prometheus
+                type: prometheus
+                url: http://prometheus-server.kasten-io/k10/prometheus/
+                access: proxy
+                editable: false
+                jsonData:
+                  timeInterval: 1m
 
               - name: InfluxDB
                 type: influxdb
                 url: http://influxdb-influxdb2.monitoring.svc.cluster.local:80
                 access: proxy
-                isDefault: true
+                isDefault: false
                 jsonData:
                   organization: "influxdata"
-                  defaultBucket: "veeam" 
+                  defaultBucket: "veeam"
                   version: "Flux"
                 secureJsonData:
                   token: "97RCYTlnEfgl67xI6E3gIfU75j9Pk37w"
@@ -62,7 +73,15 @@ spec:
 
             veeam-dashboard:
               url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/veeam-dashboard.yaml
-        
+
+            k10-dashboard:
+              gnetId: 21065
+              revision: 1
+              datasource:
+                - name: DS_PROMETHEUS
+                  value: Prometheus
+                - name: VAR_CLUSTER
+                  value: ""
   syncPolicy:
     automated:
       prune: true
