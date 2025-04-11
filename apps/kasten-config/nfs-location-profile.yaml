@@ -4,9 +4,9 @@ metadata:
   name: nfs-export-profile
   namespace: kasten-io
 spec:
-  type: Location
   locationSpec:
-    type: NFS
-    nfs:
+    type: FileStore
+    fileStore:
+      claimName: kasten-nfs-pvc
       path: /mnt/nfs
-      server: 192.168.169.2
+  type: Location
