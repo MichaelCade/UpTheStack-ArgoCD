@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: influxdb
+  namespace: kasten-io
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: kasten-io
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://charts.kasten.io/
+    targetRevision: 7.5.9
+    helm:
+      parameters:
+        - name: externalGateway.create
+          value: 'true'
+        - name: auth.tokenAuth.enabled
+          value: 'true'
+        - name: grafana.external.url
+          value: http://grafana.monitoring.svc.cluster.local:80
+    chart: k10
+  syncPolicy:
+      automated:
+        selfHeal: true
+        prune: true
+      syncOptions:
+        - CreateNamespace=true
