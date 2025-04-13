@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: telegraf
+  namespace: argocd
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://helm.influxdata.com/
+    chart: telegraf
+    targetRevision: 1.34.1
+    helm:
+      values: |
+        config:
+          agent:
+            interval: "10s"
+            round_interval: true
+          outputs:
+            influxdb_v2:
+              urls: ["http://influxdb-influxdb2.monitoring.svc.cluster.local:80"]
+              token: "97RCYTlnEfgl67xI6E3gIfU75j9Pk37w"
+              organization: "influxdata"
+              bucket: "veeam"
+          inputs:
+            cpu:
+              percpu: true
+              totalcpu: true
+              collect_cpu_time: false
+              report_active: false
+            mem: {}
+            disk:
+              ignore_fs: ["tmpfs", "devtmpfs", "overlay"]
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
