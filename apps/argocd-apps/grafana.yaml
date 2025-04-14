@@ -26,7 +26,7 @@ spec:
               secretKeyRef:
                 name: telegraf-influx-token
                 key: influx-token
-                    - name: GF_SECURITY_ADMIN_PASSWORD
+          - name: GF_SECURITY_ADMIN_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: grafana-admin-secret
@@ -59,7 +59,8 @@ spec:
                   organization: "influxdata"
                   defaultBucket: "veeam"
                   version: "Flux"
-                  token:  "${INFLUX_TOKEN}"
+                secureJsonData:
+                  token: "${INFLUX_TOKEN}"
 
         dashboardProviders:
           dashboardproviders.yaml:
