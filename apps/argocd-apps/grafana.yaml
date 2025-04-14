@@ -26,6 +26,11 @@ spec:
               secretKeyRef:
                 name: telegraf-influx-token
                 key: influx-token
+                    - name: GF_SECURITY_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: grafana-admin-secret
+                key: admin-password
         datasources:
           datasources.yaml:
             apiVersion: 1
