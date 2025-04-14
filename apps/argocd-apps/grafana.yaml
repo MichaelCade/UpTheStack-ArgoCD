@@ -75,14 +75,8 @@ spec:
             veeam-dashboard:
               url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/veeam-dashboard.yaml
 
-            k10-dashboard:
-              gnetId: 21065
-              revision: 1
-              datasource:
-                - name: DS_PROMETHEUS
-                  value: Prometheus
-                - name: VAR_CLUSTER
-                  value: ""
+            veeam-kasten-dashboard:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/veeam-kasten.yaml
 
             vsphere-telegraf-dashboard:
               url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/vsphere-telegraf-dashboard.yaml

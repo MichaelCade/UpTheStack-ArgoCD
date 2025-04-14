@@ -1,53 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_INFLUXDB",
-      "label": "InfluxDB",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.1.4"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph (old)",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -73,9 +24,8 @@
   "description": "VMware vSphere Dashboard - Hosts (Grafana 11.x / InfluxDB v2.x)",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": 8165,
   "graphTooltip": 0,
-  "id": null,
+  "id": 7,
   "links": [
     {
       "asDropdown": true,
@@ -90,14 +40,9 @@
       "type": "dashboards"
     }
   ],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "type": "influxdb",
-        "uid": "gK_s8WTMk"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -107,15 +52,6 @@
       "id": 76,
       "panels": [],
       "repeat": "esxi",
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "gK_s8WTMk"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "$esxi",
       "type": "row"
     },
@@ -142,8 +78,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#d44a3a",
-                "value": null
+                "color": "#d44a3a"
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -220,8 +155,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -263,8 +197,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -333,7 +266,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "datasource": {
@@ -401,6 +334,7 @@
             "axisLabel": "CPU Utilization %",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -433,8 +367,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -463,11 +396,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "CPU usage % $tag_cpu",
@@ -545,6 +479,7 @@
             "axisPlacement": "auto",
             "axisSoftMin": 0,
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -577,8 +512,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "dark-orange",
@@ -631,11 +565,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "RAM usage %",
@@ -707,6 +642,7 @@
             "axisLabel": "ms",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -738,8 +674,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -788,11 +723,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "CPU Ready",
@@ -864,6 +800,7 @@
             "axisLabel": "Network Usage",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -895,8 +832,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -929,11 +865,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_interface bytesRx",
@@ -1065,6 +1002,7 @@
             "axisLabel": "KBps",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -1096,8 +1034,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1126,11 +1063,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Write - $tag_disk",
@@ -1262,6 +1200,7 @@
             "axisLabel": "IOPS",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "none",
@@ -1293,8 +1232,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1323,11 +1261,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_adapter Read",
@@ -1443,15 +1382,11 @@
     },
     {
       "collapsed": true,
-      "datasource": {
-        "type": "influxdb",
-        "uid": "gK_s8WTMk"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 70
       },
       "id": 102,
       "panels": [
@@ -1630,10 +1565,9 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 6
+            "y": 62
           },
           "id": 103,
-          "links": [],
           "maxDataPoints": 100,
           "options": {
             "colorMode": "background",
@@ -1945,10 +1879,6 @@
           "type": "stat"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -1961,46 +1891,17 @@
             },
             "overrides": []
           },
-          "fill": 8,
-          "fillGradient": 7,
           "gridPos": {
             "h": 7,
             "w": 6,
             "x": 8,
-            "y": 6
+            "y": 62
           },
-          "hiddenSeries": false,
           "id": 104,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 3,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "CPU usage % $tag_cpu",
@@ -2056,45 +1957,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "CPU Utilization Avg %",
-          "tooltip": {
-            "shared": true,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:676",
-              "format": "percent",
-              "label": "CPU Utilization %",
-              "logBase": 1,
-              "max": "100",
-              "show": true
-            },
-            {
-              "$$hashKey": "object:677",
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2106,50 +1972,17 @@
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 5,
             "x": 14,
-            "y": 6
+            "y": 62
           },
-          "hiddenSeries": false,
           "id": 105,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:815",
-              "alias": "RAM usage %",
-              "color": "rgb(133, 177, 236)"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "RAM usage %",
@@ -2199,48 +2032,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "RAM Utilization",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:263",
-              "decimals": 1,
-              "format": "percent",
-              "label": "RAM Usage in %",
-              "logBase": 1,
-              "max": "100",
-              "show": true
-            },
-            {
-              "$$hashKey": "object:264",
-              "format": "percent",
-              "label": "",
-              "logBase": 1,
-              "max": "100",
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2254,52 +2049,17 @@
             },
             "overrides": []
           },
-          "fill": 8,
-          "fillGradient": 7,
           "gridPos": {
             "h": 7,
             "w": 5,
             "x": 19,
-            "y": 6
+            "y": 62
           },
-          "hiddenSeries": false,
           "id": 110,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 3,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:2948",
-              "alias": "CPU Temperature",
-              "color": "#8F3BB8"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "CPU Temperature",
@@ -2349,45 +2109,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "CPU Temperature",
-          "tooltip": {
-            "shared": false,
-            "sort": 2,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:676",
-              "decimals": 0,
-              "format": "celsius",
-              "label": "CPU Temperature in Celsius",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:677",
-              "format": "short",
-              "logBase": 1,
-              "show": false
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2400,46 +2125,17 @@
             },
             "overrides": []
           },
-          "fill": 5,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 13
+            "y": 69
           },
-          "hiddenSeries": false,
           "id": 99,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "hideEmpty": true,
-            "hideZero": true,
-            "max": true,
-            "min": true,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "$tag_interface bytesRx",
@@ -2548,44 +2244,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "Network Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:594",
-              "format": "KBs",
-              "label": "Network Usage",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:595",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2598,44 +2260,17 @@
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 6,
             "x": 8,
-            "y": 13
+            "y": 69
           },
-          "hiddenSeries": false,
           "id": 98,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "Write - $tag_disk",
@@ -2744,44 +2379,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "Total Disk Latency",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:741",
-              "format": "none",
-              "label": "KBps",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:742",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2794,44 +2395,17 @@
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 5,
             "x": 14,
-            "y": 13
+            "y": 69
           },
-          "hiddenSeries": false,
           "id": 100,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "$tag_adapter Read",
@@ -2940,44 +2514,10 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "Storage Adapter IOPS",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:886",
-              "format": "short",
-              "label": "IOPS",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:887",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
           "datasource": {
             "type": "influxdb",
             "uid": "InfluxDB"
@@ -2990,50 +2530,17 @@
             },
             "overrides": []
           },
-          "fill": 1,
-          "fillGradient": 0,
           "gridPos": {
             "h": 6,
             "w": 5,
             "x": 19,
-            "y": 13
+            "y": 69
           },
-          "hiddenSeries": false,
           "id": 92,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [],
-          "nullPointMode": "null",
           "options": {
             "alertThreshold": true
           },
-          "paceLength": 10,
-          "percentage": false,
           "pluginVersion": "7.3.5",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-            {
-              "$$hashKey": "object:944",
-              "alias": "CPU Ready",
-              "color": "#C4162A"
-            }
-          ],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
           "targets": [
             {
               "alias": "CPU Ready",
@@ -3083,56 +2590,18 @@
               ]
             }
           ],
-          "thresholds": [],
-          "timeRegions": [],
           "title": "CPU Ready in miliseconds",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "$$hashKey": "object:928",
-              "format": "none",
-              "label": "ms",
-              "logBase": 1,
-              "show": true
-            },
-            {
-              "$$hashKey": "object:929",
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "type": "timeseries"
         }
       ],
       "repeat": "esxiarm",
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "gK_s8WTMk"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "ARM - $esxiarm",
       "type": "row"
-    },
+    }
   ],
+  "preload": false,
   "refresh": "5m",
-  "schemaVersion": 39,
+  "schemaVersion": 41,
   "tags": [
     "VMware",
     "vSphere Hosts",
@@ -3146,11 +2615,9 @@
         "auto_count": 100,
         "auto_min": "20s",
         "current": {
-          "selected": false,
           "text": "auto",
           "value": "$__auto_interval_inter"
         },
-        "hide": 0,
         "label": "Sampling",
         "name": "inter",
         "options": [
@@ -3217,7 +2684,6 @@
         ],
         "query": "20s,1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
         "refresh": 2,
-        "skipUrlSync": false,
         "type": "interval"
       },
       {
@@ -3227,7 +2693,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> keep(columns: [\"vcenter\"])\r\n  |> distinct(column: \"vcenter\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "vCenter Server",
         "multi": true,
@@ -3236,12 +2701,7 @@
         "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> keep(columns: [\"vcenter\"])\r\n  |> distinct(column: \"vcenter\")\r\n  |> group()",
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -3250,7 +2710,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_cluster_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> keep(columns: [\"clustername\"])\r\n  |> distinct(column: \"clustername\")\r\n  |> group()\r\n",
-        "hide": 0,
         "includeAll": true,
         "label": "Cluster",
         "multi": true,
@@ -3563,12 +3022,7 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -3577,7 +3031,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> keep(columns: [\"esxhostname\"])\r\n  |> distinct(column: \"esxhostname\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "ESXi Server",
         "multi": true,
@@ -3885,12 +3338,7 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -3899,7 +3347,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_datastore_disk\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> keep(columns: [\"source\"])\r\n  |> distinct(column: \"source\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "Datastore",
         "multi": true,
@@ -4203,12 +3650,7 @@
         },
         "refresh": 2,
         "regex": "/^(?!VeeamBackup_)/",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -4217,7 +3659,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_esxi_arm\")\r\n  |> keep(columns: [\"hostname\"])\r\n  |> distinct(column: \"hostname\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "ESXi ARM Server",
         "multi": true,
@@ -4226,12 +3667,7 @@
         "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_esxi_arm\")\r\n  |> keep(columns: [\"hostname\"])\r\n  |> distinct(column: \"hostname\")\r\n  |> group()",
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       }
     ]
   },
@@ -4250,22 +3686,10 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
     ]
   },
   "timezone": "browser",
   "title": "VMware vSphere  - Hosts",
   "uid": "MxqCLP0mk",
-  "version": 19,
-  "weekStart": ""
+  "version": 1
 }

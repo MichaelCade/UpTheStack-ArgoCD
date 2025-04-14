@@ -1,71 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_INFLUXDB",
-      "label": "InfluxDB",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    },
-    {
-      "name": "DS_EXPRESSION",
-      "label": "Expression",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "__expr__"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "datasource",
-      "id": "__expr__",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "bargauge",
-      "name": "Bar gauge",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "gauge",
-      "name": "Gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.5.0"
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -92,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 5,
   "links": [
     {
       "asDropdown": true,
@@ -148,8 +81,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#d44a3a",
-                "value": null
+                "color": "#d44a3a"
               }
             ]
           },
@@ -250,7 +182,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "vCenter Summary",
@@ -503,8 +435,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#d44a3a",
-                "value": null
+                "color": "#d44a3a"
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -539,8 +470,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -575,8 +505,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -629,8 +558,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "semi-dark-orange",
@@ -920,8 +848,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
-                "value": null
+                "color": "dark-green"
               },
               {
                 "color": "dark-green",
@@ -1236,8 +1163,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-blue",
-                "value": null
+                "color": "dark-blue"
               }
             ]
           },
@@ -1317,8 +1243,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "dark-green",
-                      "value": null
+                      "color": "dark-green"
                     },
                     {
                       "color": "dark-green",
@@ -1347,7 +1272,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 19
       },
       "id": 229,
       "interval": "$inter",
@@ -1469,7 +1394,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 27
       },
       "id": 61,
       "panels": [],
@@ -1527,8 +1452,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1544,7 +1468,7 @@
         "h": 5,
         "w": 6,
         "x": 0,
-        "y": 20
+        "y": 28
       },
       "id": 23,
       "interval": "$inter",
@@ -1565,7 +1489,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_clustername",
@@ -1691,8 +1615,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1708,7 +1631,7 @@
         "h": 5,
         "w": 7,
         "x": 6,
-        "y": 20
+        "y": 28
       },
       "id": 26,
       "interval": "$inter",
@@ -1726,7 +1649,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_clustername",
@@ -1812,8 +1735,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
-                "value": null
+                "color": "dark-green"
               },
               {
                 "color": "dark-yellow",
@@ -1837,7 +1759,7 @@
         "h": 9,
         "w": 11,
         "x": 13,
-        "y": 20
+        "y": 28
       },
       "hideTimeOverride": false,
       "id": 123,
@@ -1867,7 +1789,7 @@
         "text": {},
         "valueMode": "color"
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_source",
@@ -1965,8 +1887,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1982,7 +1903,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 25
+        "y": 33
       },
       "id": 90,
       "interval": "$inter",
@@ -2000,7 +1921,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_clustername - Received",
@@ -2168,8 +2089,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2185,7 +2105,7 @@
         "h": 4,
         "w": 7,
         "x": 6,
-        "y": 25
+        "y": 33
       },
       "id": 91,
       "interval": "$inter",
@@ -2203,7 +2123,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_clustername - ReadAverage",
@@ -2327,7 +2247,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 37
       },
       "id": 25,
       "panels": [],
@@ -2351,8 +2271,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-green",
-                "value": null
+                "color": "dark-green"
               },
               {
                 "color": "dark-orange",
@@ -2372,7 +2291,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 38
       },
       "hideTimeOverride": true,
       "id": 34,
@@ -2514,8 +2433,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2553,7 +2471,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_esxhostname",
@@ -2672,8 +2590,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2711,7 +2628,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_esxhostname mem usage average",
@@ -2821,8 +2738,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2860,7 +2776,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_esxhostname net usage average",
@@ -2972,8 +2888,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3007,7 +2922,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vcenter CPU",
@@ -3197,8 +3112,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3232,7 +3146,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -3357,8 +3271,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3392,7 +3305,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -3502,8 +3415,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3537,7 +3449,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -3649,8 +3561,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3684,7 +3595,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -3794,8 +3705,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3829,7 +3739,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -3942,8 +3852,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3977,7 +3886,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -4089,8 +3998,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4124,7 +4032,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "11.5.0",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_vmname",
@@ -4243,31 +4151,11 @@
       ],
       "title": "Virtual Machine Disk Performance (Block Latency Total)",
       "type": "timeseries"
-    },
-    {
-      "gridPos": {
-        "h": 3,
-        "w": 5,
-        "x": 19,
-        "y": 65
-      },
-      "id": 166,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<a href=\"https://www.jorgedelacruz.es\"><img src=\"https://www.jorgedelacruz.es/wp-content/uploads/2019/04/jorgedelacruz-banner_2efede4ef704c939e63a3763231f5961.png\"></a>",
-        "mode": "html"
-      },
-      "pluginVersion": "11.5.0",
-      "transparent": true,
-      "type": "text"
     }
   ],
+  "preload": false,
   "refresh": "",
-  "schemaVersion": 40,
+  "schemaVersion": 41,
   "tags": [
     "VMware",
     "vSphere Overview",
@@ -5821,7 +5709,5 @@
   "timezone": "browser",
   "title": "VMware vSphere  - Overview",
   "uid": "kwtyVaAmz",
-  "version": 13,
-  "weekStart": "",
-  "gnetId": 8159
+  "version": 1
 }

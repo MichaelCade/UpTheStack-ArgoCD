@@ -1,47 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_INFLUXDB",
-      "label": "InfluxDB",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "influxdb",
-      "pluginName": "InfluxDB"
-    }
-  ],
-  "__elements": {},
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "11.1.4"
-    },
-    {
-      "type": "datasource",
-      "id": "influxdb",
-      "name": "InfluxDB",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -67,9 +24,8 @@
   "description": "VMware vSphere Dashboard - VMs (Grafana 11.x / InfluxDB v2.x)",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": 8168,
   "graphTooltip": 0,
-  "id": null,
+  "id": 1,
   "links": [
     {
       "asDropdown": true,
@@ -84,14 +40,9 @@
       "type": "dashboards"
     }
   ],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "type": "influxdb",
-        "uid": "gK_s8WTMk"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -101,15 +52,6 @@
       "id": 76,
       "panels": [],
       "repeat": "virtualmachine",
-      "targets": [
-        {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "gK_s8WTMk"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "$virtualmachine",
       "type": "row"
     },
@@ -136,8 +78,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#d44a3a",
-                "value": null
+                "color": "#d44a3a"
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -192,8 +133,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -240,8 +180,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-yellow",
@@ -331,8 +270,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -374,8 +312,7 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
-                      "value": null
+                      "color": "semi-dark-green"
                     },
                     {
                       "color": "dark-orange",
@@ -424,7 +361,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "11.1.4",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Uptime",
@@ -688,6 +625,7 @@
             "axisLabel": "CPU Utilization %",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -721,8 +659,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               }
             ]
           },
@@ -786,11 +723,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "CPU usage %",
@@ -922,6 +860,7 @@
             "axisLabel": "RAM Usage in %",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -954,8 +893,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1004,11 +942,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "RAM usage %",
@@ -1086,6 +1025,7 @@
             "axisLabel": "ms",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -1119,8 +1059,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1173,11 +1112,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Core $tag_cpu",
@@ -1261,6 +1201,7 @@
             "axisLabel": "Network Usage",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -1293,8 +1234,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1327,11 +1267,12 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "$tag_interface bytesRx",
@@ -1463,6 +1404,7 @@
             "axisLabel": "ms",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -1494,8 +1436,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1524,11 +1465,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "Write - $tag_disk",
@@ -1660,6 +1602,7 @@
             "axisLabel": "ms",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 30,
             "gradientMode": "hue",
@@ -1691,8 +1634,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1721,11 +1663,12 @@
           "showLegend": false
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "7.5.3",
+      "pluginVersion": "11.6.0",
       "targets": [
         {
           "alias": "ReadAverage $tag_disk",
@@ -1838,10 +1781,11 @@
       ],
       "title": "Storage Adapter Latency",
       "type": "timeseries"
-    },
+    }
   ],
+  "preload": false,
   "refresh": false,
-  "schemaVersion": 39,
+  "schemaVersion": 41,
   "tags": [
     "VMware",
     "vSphere VM",
@@ -1855,11 +1799,9 @@
         "auto_count": 100,
         "auto_min": "20s",
         "current": {
-          "selected": true,
           "text": "auto",
           "value": "$__auto_interval_inter"
         },
-        "hide": 0,
         "label": "Sampling",
         "name": "inter",
         "options": [
@@ -1925,9 +1867,7 @@
           }
         ],
         "query": "20s,1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
-        "queryValue": "",
         "refresh": 2,
-        "skipUrlSync": false,
         "type": "interval"
       },
       {
@@ -1937,7 +1877,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> keep(columns: [\"vcenter\"])\r\n  |> distinct(column: \"vcenter\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "vCenter Server",
         "multi": true,
@@ -1946,12 +1885,7 @@
         "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> keep(columns: [\"vcenter\"])\r\n  |> distinct(column: \"vcenter\")\r\n  |> group()",
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -1960,7 +1894,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_cluster_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> keep(columns: [\"clustername\"])\r\n  |> distinct(column: \"clustername\")\r\n  |> group()\r\n",
-        "hide": 0,
         "includeAll": true,
         "label": "Cluster",
         "multi": true,
@@ -2273,12 +2206,7 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -2287,7 +2215,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> filter(fn: (r) => r[\"clustername\"] =~ /${clustername:regex}/)\r\n  |> keep(columns: [\"esxhostname\"])\r\n  |> distinct(column: \"esxhostname\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "ESXi Server",
         "multi": true,
@@ -2296,12 +2223,7 @@
         "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_host_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> filter(fn: (r) => r[\"clustername\"] =~ /${clustername:regex}/)\r\n  |> keep(columns: [\"esxhostname\"])\r\n  |> distinct(column: \"esxhostname\")\r\n  |> group()",
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
         "current": {},
@@ -2310,7 +2232,6 @@
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_datastore_disk\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> keep(columns: [\"source\"])\r\n  |> distinct(column: \"source\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "Datastore",
         "multi": true,
@@ -2560,22 +2481,15 @@
         },
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
-        "allValue": "",
         "current": {},
         "datasource": {
           "type": "influxdb",
           "uid": "InfluxDB"
         },
         "definition": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_vm_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> filter(fn: (r) => r[\"clustername\"] =~ /${clustername:regex}/)\r\n  |> keep(columns: [\"vmname\"])\r\n  |> distinct(column: \"vmname\")\r\n  |> group()",
-        "hide": 0,
         "includeAll": true,
         "label": "VM",
         "multi": true,
@@ -2584,7 +2498,6 @@
         "query": "from(bucket: v.defaultBucket)\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vsphere_vm_cpu\")\r\n  |> filter(fn: (r) => r[\"vcenter\"] =~ /${vcenter:regex}/)\r\n  |> filter(fn: (r) => r[\"clustername\"] =~ /${clustername:regex}/)\r\n  |> keep(columns: [\"vmname\"])\r\n  |> distinct(column: \"vmname\")\r\n  |> group()",
         "refresh": 2,
         "regex": "",
-        "skipUrlSync": false,
         "sort": 5,
         "type": "query"
       }
@@ -2605,22 +2518,10 @@
       "1h",
       "2h",
       "1d"
-    ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
     ]
   },
   "timezone": "browser",
   "title": "VMware vSphere  - VMs",
   "uid": "hNDB_E0ik",
-  "version": 10,
-  "weekStart": ""
+  "version": 1
 }
