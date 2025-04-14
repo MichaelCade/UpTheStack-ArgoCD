@@ -78,7 +78,17 @@ spec:
                 name: telegraf-influx-token
                 key: influx-token
         service:
-          enabled: false
+          enabled: true
+          type: LoadBalancer
+          ports:
+            - name: statsd
+              port: 8125
+              protocol: UDP
+              targetPort: 8125
+            - name: prometheus
+              port: 9273
+              protocol: TCP
+              targetPort: 9273
         pdb:
           create: true
           minAvailable: 1

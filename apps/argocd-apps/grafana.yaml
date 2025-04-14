@@ -20,6 +20,12 @@ spec:
           type: LoadBalancer
         persistence:
           enabled: true
+        env:
+          - name: INFLUX_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: telegraf-influx-token
+                key: influx-token
         datasources:
           datasources.yaml:
             apiVersion: 1
@@ -48,8 +54,7 @@ spec:
                   organization: "influxdata"
                   defaultBucket: "veeam"
                   version: "Flux"
-                secureJsonData:
-                  token: "97RCYTlnEfgl67xI6E3gIfU75j9Pk37w"
+                  token:  "${INFLUX_TOKEN}"
 
         dashboardProviders:
           dashboardproviders.yaml:
