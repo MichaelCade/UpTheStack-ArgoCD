@@ -6232,7 +6232,11 @@
   "preload": false,
   "refresh": "",
   "schemaVersion": 41,
-  "tags": [],
+  "tags": [
+    "veeam",
+    "backup & replication", 
+    "kubernetes"
+  ],
   "templating": {
     "list": [
       {
@@ -6279,7 +6283,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Kasten Dashboard",
+  "title": "Veeam Kasten Dashboard",
   "uid": "8Ebb3xS7k",
   "version": 1
 }
