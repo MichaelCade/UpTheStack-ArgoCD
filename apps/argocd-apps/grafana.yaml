@@ -20,17 +20,13 @@ spec:
           type: LoadBalancer
         persistence:
           enabled: true
+        adminPassword: Passw0rd999!
         env:
           - name: INFLUX_TOKEN
             valueFrom:
               secretKeyRef:
                 name: telegraf-influx-token
                 key: influx-token
-          - name: GF_SECURITY_ADMIN_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: grafana-admin-secret
-                key: admin-password
         datasources:
           datasources.yaml:
             apiVersion: 1
@@ -59,7 +55,6 @@ spec:
                   organization: "influxdata"
                   defaultBucket: "veeam"
                   version: "Flux"
-                secureJsonData:
                   token: "${INFLUX_TOKEN}"
 
         dashboardProviders:
