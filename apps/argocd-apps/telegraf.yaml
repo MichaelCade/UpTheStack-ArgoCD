@@ -14,43 +14,71 @@ spec:
     targetRevision: 1.8.56
     helm:
       values: |
+        replicaCount: 1
+        image:
+          repo: "docker.io/library/telegraf"
+          tag: "1.34-alpine"
+          pullPolicy: IfNotPresent
         config:
-          influxdb2Url: "http://influxdb-influxdb2.monitoring.svc.cluster.local:80"
-        telegraf:
-          args:
-          - "--config"
-          - "/etc/telegraf-generated/telegraf-generated.conf"
-          config:
-            outputs:
-              - influxdb_v2:
-                  urls: ["http://influxdb-influxdb2.monitoring.svc.cluster.local:80"]
-                  insecure_skip_verify: false
-                  token: "${INFLUX_TOKEN}"  # Use the token from the secret
-                  organization: "influxdata"
-                  bucket: "veeam"
-            inputs: []  # Add specific inputs if needed
-            processors: []  # Add specific processors if needed
-          resources:
-            limits:
-              memory: "1Gi"
-              cpu: "1"
-            requests:
-              memory: "350Mi"
-              cpu: "50m"
-          rbac:
-            clusterWide: true
-          env:
+          agent:
+            interval: "10s"
+            round_interval: true
+            metric_batch_size: 1000
+            metric_buffer_limit: 10000
+            collection_jitter: "0s"
+            flush_interval: "10s"
+            flush_jitter: "0s"
+            precision: ""
+            debug: false
+            quiet: false
+            logfile: ""
+            hostname: "$HOSTNAME"
+            omit_hostname: false
+          processors:
+            - enum:
+                mapping:
+                  field: "status"
+                  dest: "status_code"
+                  value_mappings:
+                    healthy: 1
+                    problem: 2
+                    critical: 3
+          outputs:
+            - influxdb_v2:
+                urls:
+                  - "http://influxdb-influxdb2.monitoring.svc.cluster.local:80"
+                token: "${INFLUX_TOKEN}"  # Use the token from the secret
+                organization: "influxdata"
+                bucket: "veeam"
+                insecure_skip_verify: false
+          inputs:
+            - statsd:
+                service_address: ":8125"
+                percentiles:
+                  - 50
+                  - 95
+                  - 99
+                metric_separator: "_"
+                allowed_pending_messages: 10000
+                percentile_limit: 1000
+        resources:
+          limits:
+            memory: "1Gi"
+            cpu: "1"
+          requests:
+            memory: "350Mi"
+            cpu: "50m"
+        rbac:
+          create: true
+          clusterWide: true
+        env:
           - name: INFLUX_TOKEN
             valueFrom:
               secretKeyRef:
                 name: telegraf-influx-token
                 key: influx-token
-          service:
-            enabled: false
-          tplVersion: 2
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+        service:
+          enabled: false
+        pdb:
+          create: true
+          minAvailable: 1
