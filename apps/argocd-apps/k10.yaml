@@ -19,6 +19,8 @@ spec:
           value: 'true'
         - name: auth.tokenAuth.enabled
           value: 'true'
+        - name: grafana.enabled
+          value: 'false'
         - name: grafana.external.url
           value: http://grafana.monitoring.svc.cluster.local:80
     chart: k10
