@@ -61,6 +61,12 @@ spec:
                 metric_separator: "_"
                 allowed_pending_messages: 10000
                 percentile_limit: 1000
+
+            - proxmox: 
+                base_url: "https://192.168.169.179:8006/api2/json"
+                api_token: "root@pam!telegraf-token=beb9523c-f9e7-4aea-a223-cddd7d69b679"
+                insecure_skip_verify: true  
+
             - vsphere:
                 vcenters:
                   - "https://192.168.169.181/sdk"

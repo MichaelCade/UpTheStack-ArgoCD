@@ -70,6 +70,9 @@ spec:
             kubernetes:
               url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/kubernetes-dashboard.yaml
 
+            proxmox:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/proxmox-dashboard.yaml
+
             veeam-dashboard:
               url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/veeam-dashboard.yaml
 

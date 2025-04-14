@@ -25,10 +25,10 @@ spec:
           password: Passw0rd999! # Replace with a secure password
         auth:
           enabled: true
-        http:
-          enabled: true
-          service:
-            type: LoadBalancer
+        service: 
+          type: LoadBalancer
+          port: 80 
+          portName: http
         resources:
           requests:
             memory: 512Mi
