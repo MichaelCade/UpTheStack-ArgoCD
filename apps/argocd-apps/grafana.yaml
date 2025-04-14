@@ -20,6 +20,7 @@ spec:
           type: LoadBalancer
         persistence:
           enabled: true
+        adminPassword: "Passw0rd999!"
         datasources:
           datasources.yaml:
             apiVersion: 1
@@ -72,7 +73,7 @@ spec:
               datasource: Prometheus
 
             veeam-dashboard:
-              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/veeam-dashboard.yaml
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/veeam-dashboard.yaml
 
             k10-dashboard:
               gnetId: 21065
@@ -82,6 +83,19 @@ spec:
                   value: Prometheus
                 - name: VAR_CLUSTER
                   value: ""
+
+            vsphere-telegraf-dashboard:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/vsphere-telegraf-dashboard.yaml
+            
+            vsphere-telegraf-datastore:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/vsphere-telegraf-datastore.yaml
+
+            vsphere-telegraf-hosts:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/vsphere-telegraf-hosts.yaml
+
+            vsphere-telegraf-vms:
+              url: https://raw.githubusercontent.com/MichaelCade/UpTheStack-ArgoCD/refs/heads/main/apps/argocd-apps/grafana-dashboards/vsphere-telegraf-vms.yaml
+
   syncPolicy:
     automated:
       prune: true
