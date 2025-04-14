@@ -661,40 +661,6 @@
       "title": "Capacity Summary",
       "type": "piechart"
     },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 129
-      },
-      "id": 151,
-      "panels": [],
-      "title": "Contact me:",
-      "type": "row"
-    },
-    {
-      "gridPos": {
-        "h": 3,
-        "w": 5,
-        "x": 19,
-        "y": 130
-      },
-      "id": 149,
-      "options": {
-        "code": {
-          "language": "plaintext",
-          "showLineNumbers": false,
-          "showMiniMap": false
-        },
-        "content": "<a href=\"https://www.jorgedelacruz.es\"><img src=\"https://www.jorgedelacruz.es/wp-content/uploads/2019/04/jorgedelacruz-banner_2efede4ef704c939e63a3763231f5961.png\"></a>",
-        "mode": "html"
-      },
-      "pluginVersion": "11.5.0",
-      "transparent": true,
-      "type": "text"
-    }
   ],
   "refresh": "5m",
   "schemaVersion": 40,
