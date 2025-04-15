@@ -9,7 +9,7 @@ metadata:
     cdi.kubevirt.io/storage.bind.immediate.requested: "true"
     cdi.kubevirt.io/storage.import.endpoint: "https://download.fedoraproject.org/pub/fedora/linux/releases/39/Cloud/x86_64/images/Fedora-Cloud-Base-39-1.5.x86_64.qcow2"
 spec:
-  storageClassName: local-path
+  storageClassName: ceph-block
   accessModes:
     - ReadWriteOnce
   resources:
