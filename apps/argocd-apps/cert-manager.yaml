@@ -10,8 +10,22 @@ spec:
     chart: cert-manager
     targetRevision: v1.14.3
     helm:
-      valueFiles:
-        - git@github.com:michaelcade/upthestack-argocd/apps/cert-manager-values.yaml
+      values: |
+        installCRDs: true
+        replicaCount: 2
+        webhook:
+          replicaCount: 2
+        cainjector:
+          replicaCount: 2
+        extraArgs:
+          - --enable-certificate-owner-ref=true
+        nodeSelector:
+          kubernetes.io/os: linux
+        tolerations:
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+            effect: "NoSchedule"
+          - operator: "Exists"
   destination:
     server: https://kubernetes.default.svc
     namespace: cert-manager
