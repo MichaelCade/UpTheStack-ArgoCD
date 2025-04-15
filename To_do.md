@@ -27,3 +27,11 @@ Databases
 []MongoDB
 []MySQL
 []SurrealDB
+
+
+Other things
+Talos on vSphere cluster
+OpenShift on vSphere
+Rancher / K3s on vSphere
+
+Health data via API to database and then into grafana instance
