@@ -1,24 +1,29 @@
-ArgoCD Apps for home lab 
+ArgoCD Apps for home lab
 
-[√]Rook-ceph 
-[√]Kasten 
-[√]Ollama 
-[√]Sealed Secrets 
+[√]Rook-ceph
+[√]Kasten
+[√]Ollama
+[√]Sealed Secrets
 
-[√]Grafana 
-[√]Prometheus 
-[√]Perses 
-[√]InfluxDB 
-[]Telegraf 
+[√]Grafana
+[√]Prometheus
+[√]Perses
+[√]InfluxDB
+[√]Telegraf
 
-[]Vault 
+[]Kubevirt - https://github.com/cwilkers/kubevirt-gitops/tree/main?tab=readme-ov-file
+[]Vault
 []n8n
-[]Uptime Kuma 
-[]CertManager 
+[]Uptime Kuma
+[]CertManager - think needed for kubevirt
+[]Tailscale
+
+Demo Apps
 []Pacman
-[]Postgres 
-[]K10App 
-[]Tailscale 
+[]K10App
 
-I will have to increase IP count or we sort ingress 
-
+Databases
+[]Postgres
+[]MongoDB
+[]MySQL
+[]SurrealDB
