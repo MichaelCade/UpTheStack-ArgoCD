@@ -151,7 +151,7 @@ spec:
           enabled: true
           replicaCount: 1
           service:
-            type: ClusterIP
+            type: LoadBalancer
             port: 8080
             protocol: TCP
             name: http
