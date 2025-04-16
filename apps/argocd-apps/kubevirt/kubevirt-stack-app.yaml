@@ -15,7 +15,7 @@ spec:
     namespace: kubevirt
     server: 'https://kubernetes.default.svc'
   source:
-    repoURL: https://github.com/cloudymax/kubevirt-community-stack.git
+    repoURL: https://github.com/MichaelCade/kubevirt-community-stack.git
     targetRevision: HEAD
     path: charts/kubevirt-stack/
     helm:
