@@ -16,7 +16,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: ''
-    repoURL: 'https://cloudymax.github.io/kubevirt-community-stack/'
+    repoURL: 'https://github.com/michaelcade/kubevirt-community-stack/'
     targetRevision: 0.2.1
     chart: kubevirt-cdi
     helm: 
