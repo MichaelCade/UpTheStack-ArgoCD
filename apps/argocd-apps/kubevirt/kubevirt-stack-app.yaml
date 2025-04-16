@@ -240,3 +240,8 @@ spec:
               - mountPath: /tmp/k8s-webhook-server/serving-certs
                 name: cert
                 readOnly: true
+  syncPolicy:
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+    automated:
+      selfHeal: true
