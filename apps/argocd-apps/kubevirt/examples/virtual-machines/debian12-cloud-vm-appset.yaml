@@ -46,7 +46,7 @@ spec:
           prune: true
           selfHeal: true
       source:
-        repoURL: 'https://cloudymax.github.io/kubevirt-community-stack/'
+        repoURL: 'https://michaelcade.github.io/kubevirt-community-stack/'
         targetRevision: 0.4.15
         chart: kubevirt-vm
         helm:
