@@ -75,9 +75,6 @@ spec:
                 pinCores: true
                 hyperThreadingEnabled: '{{ .vm_hyperthreads }}'
                 memory: '{{ .vm_memory }}'
-              gpus:
-              - name: gpu0
-                deviceName: nvidia.com/GRID_M60-2Q
             
             #########################
             # Create a Virtual Machine Pool
