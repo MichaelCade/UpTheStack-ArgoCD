@@ -10,7 +10,7 @@ spec:
     server: 'https://kubernetes.default.svc'
   source:
     path: ''
-    repoURL: 'https://michaelcade.github.io/kubevirt-community-stack/'
+    repoURL: 'https://cloudymax.github.io/kubevirt-community-stack/'
     targetRevision: 0.4.15
     chart: kubevirt-vm
     helm:
@@ -33,10 +33,14 @@ spec:
             vCores: 4
             pinCores: false
             hyperThreadingEnabled: false
-            memory: 8Gi
-          gpus:
-          - name: gpu0
-            deviceName: nvidia.com/GRID_M60-2Q
+            memory:
+              base: 8Gi
+              overcommit:
+                enabled: false
+                limit: 8Gi
+                overhead: false
+
+
         
         virtualMachinePool:
           enabled: true
@@ -92,7 +96,11 @@ spec:
               sudo: ALL=(ALL) NOPASSWD:ALL
               shell: /bin/bash
               lock_passwd: false
-              passwd: "$6$rounds=4096$saltsaltlettuce$Lp/FV.2oOgew7GbM6Nr8KMGMBn7iFM0x9ZwLqtx9Y4QJmKvfcnS.2zx4MKmymCPQGpHS7gqYOiqWjvdCIV2uN."
+              password:
+                random: false
+                existingSecret:
+                  name: admin-password
+                  key: password
               ssh_import_id: []
               ssh_authorized_keys: []
           ca_certs: []
